@@ -1,0 +1,21 @@
+.big-input textarea,
+.big-input input {
+  min-height: 50px !important;
+  padding: 12px !important;
+  font-size: 1rem !important;
+}
+
+.form-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 30px;
+  margin-bottom: 8px;
+}
+
+.form-question-block {
+  padding: 20px 24px;
+  background: #fafafa;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+}

@@ -955,7 +955,7 @@ const customTheme = createTheme({
 
   const step = sections[currentStep];
 
- return (
+return (
   <ThemeProvider theme={customTheme}>
     <>
       <CssBaseline />
@@ -972,40 +972,42 @@ const customTheme = createTheme({
           </Typography>
 
           <Form
-            schema={{
-              type: 'object',
-              properties: {
-                [step.key]: schema.properties[step.key],
-              },
-            }}
-            uiSchema={{ [step.key]: uiSchema[step.key] }}
-            formData={{ [step.key]: formData[step.key] || {} }}
-            validator={validator}
-            onSubmit={
-              currentStep === sections.length - 1 ? handleSubmit : handleNext
-            }
-          >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-              {currentStep > 0 && (
-                <Button variant="contained" color="secondary" onClick={handleBack}>
-                  Previous
-                </Button>
-              )}
+  schema={{
+    type: "object",
+    properties: {
+      [step.key]: schema.properties[step.key],
+    },
+  }}
+  uiSchema={{ [step.key]: uiSchema[step.key] }}
+  formData={{ [step.key]: formData[step.key] || {} }}
+  validator={validator}
+  onSubmit={(data) => {
+    console.log("Schema:", JSON.stringify(schema));
 
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                sx={{ ml: 'auto' }}
-              >
-                {currentStep === sections.length - 1 ? 'Submit' : 'Next'}
-              </Button>
-            </Box>
-          </Form>
-        </Paper>
-      </Container>
-    </>
-  </ThemeProvider>
-);
+    if (currentStep === sections.length - 1) {
+      handleSubmit(data);
+    } else {
+      handleNext(data);
+    }
+  }}
+>
+  <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+    {currentStep > 0 && (
+      <Button variant="contained" color="secondary" onClick={handleBack}>
+        Previous
+      </Button>
+    )}
 
+    <Button variant="contained" color="primary" type="submit" sx={{ ml: "auto" }}>
+      {currentStep === sections.length - 1 ? "Submit" : "Next"}
+    </Button>
+  </Box>
+</Form>
+
+</Paper>
+</Container>
+</>
+</ThemeProvider>
+
+  );
 }

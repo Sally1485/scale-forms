@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
-import Form from '@rjsf/mui';
+import { useState } from 'react';
+import { withTheme } from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
-import {
-  CssBaseline,
-  Container,
-  Paper,
-  Typography,
-  Divider,
-  Box,
-  Button
-} from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Theme } from "@rjsf/shadcn";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+// import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
+const Form = withTheme(Theme);
 
 export default function Scaleforms() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -19,45 +17,16 @@ export default function Scaleforms() {
 
   // Steps
   const sections = [
-    { key: 'endurancePurpose'  },
-    { key: 'connectedClients'  },
+    { key: 'endurancePurpose' },
+    { key: 'connectedClients' },
     { key: 'goodsAndServices' },
-    { key: 'ecosystem'},
+    { key: 'ecosystem' },
     { key: 'scaleStrategy' },
     { key: 'financial' },
     { key: 'inspiredPeople' },
     { key: 'fundamentals' },
 
   ];
-
- 
-const customTheme = createTheme({
-  components: {
-    MuiFormLabel: {
-      styleOverrides: {
-        root: {
-          fontSize: "20px",        
-                 
-          color: "#333",           
-        },
-      },
-    },
-    MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          fontSize: "18px",
-        },
-      },
-    },
-    MuiTypography: {
-      styleOverrides: {
-        root: {
-          fontSize: "18px",
-        },
-      },
-    },
-  },
-});
 
 
   // Schema
@@ -882,60 +851,80 @@ const customTheme = createTheme({
   };
 
 
-
-
   // UI Schema
   const uiSchema = {
-    endurancePurpose: {
-      q1: { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } },
-      q2: { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } },
-      q3: { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } },
-      q4: { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } },
+    'ui:submitButtonOptions': {
+      submitText: 'Submit',
+      norender: true,
     },
-    connectedClients: Object.fromEntries(
-      Array.from({ length: 15 }).map((_, i) => [
-        `q${i + 1}`,
-        { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } }
-      ])
-    ),
-    goodsAndServices: Object.fromEntries(
-      Array.from({ length: 15 }).map((_, i) => [
-        `q${i + 1}`,
-        { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } }
-      ])
-    ),
-    ecosystem: Object.fromEntries(
-      Array.from({ length: 15 }).map((_, i) => [
-        `q${i + 1}`,
-        { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } }
-      ])
-    ),
-    scaleStrategy: Object.fromEntries(
-      Array.from({ length: 15 }).map((_, i) => [
-        `q${i + 1}`,
-        { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } }
-      ])
-    ),
-    financial: Object.fromEntries(
-      Array.from({ length: 15 }).map((_, i) => [
-        `q${i + 1}`,
-        { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } }
-      ])
-    ),
-    inspiredPeople: Object.fromEntries(
-      Array.from({ length: 15 }).map((_, i) => [
-        `q${i + 1}`,
-        { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } }
-      ])
-    ),
-    fundamentals: Object.fromEntries(
-      Array.from({ length: 15 }).map((_, i) => [
-        `q${i + 1}`,
-        { rating: { 'ui:widget': 'updown' }, comment: { 'ui:widget': 'textarea' } }
-      ])
-    ),
   };
 
+  // Create a function to generate consistent UI Schema for all sections
+  const createQuestionUISchema = (questionCount) => {
+    const uiSchema = {};
+
+    for (let i = 1; i <= questionCount; i++) {
+      uiSchema[`q${i}`] = {
+        rating: {
+          'ui:options': {
+            min: 0,
+            max: 5,
+            step: 1
+          }
+        },
+        comment: {
+          'ui:widget': 'TextareaWidget',
+          'ui:options': {
+            rows: 8,
+            classNames: 'large-textarea min-h-[150px] h-[150px]'
+          }
+        }
+      };
+    }
+
+    return uiSchema;
+  };
+
+  // Apply the UI Schema to each section
+  const sectionUISchema = {
+    endurancePurpose: createQuestionUISchema('endurancePurpose', 4),
+    connectedClients: createQuestionUISchema('connectedClients', 15),
+    goodsAndServices: createQuestionUISchema('goodsAndServices', 7),
+    ecosystem: createQuestionUISchema('ecosystem', 8),
+    scaleStrategy: createQuestionUISchema('scaleStrategy', 9),
+    financial: createQuestionUISchema('financial', 15),
+    inspiredPeople: createQuestionUISchema('inspiredPeople', 15),
+    fundamentals: createQuestionUISchema('fundamentals', 3),
+  };
+
+
+
+  // Custom widgets for better Shadcn styling
+  // Custom Rating Widget
+  const CustomTextareaWidget = (props) => {
+    return (
+      <div className="space-y-2 mt-4">
+        <label className="text-sm font-medium text-gray-700">
+          {props.label || 'Comment'}
+        </label>
+        <Textarea
+          value={props.value || ''}
+          onChange={(e) => props.onChange(e.target.value)}
+          placeholder={props.placeholder || 'Enter your comments here...'}
+          className="min-h-45 resize-y h-150 "
+
+        />
+        {props.description && (
+          <p className="text-sm text-gray-500 mt-1">{props.description}</p>
+        )}
+      </div>
+    );
+  };
+
+  // Custom widgets object
+  const customWidgets = {
+    TextareaWidget: CustomTextareaWidget,
+  };
   // Handlers
   const handleNext = (data) => {
     setFormData({ ...formData, [sections[currentStep].key]: data.formData });
@@ -954,60 +943,184 @@ const customTheme = createTheme({
   };
 
   const step = sections[currentStep];
+  const progress = ((currentStep + 1) / sections.length) * 100;
 
-return (
-  <ThemeProvider theme={customTheme}>
+  const textareaStyles = `
+  textarea {
+    min-height: 150px !important;
+    resize: vertical !important;
+    padding: 12px !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+  }
+  
+  .field-description {
+    font-size: 14px !important;
+    color: #666 !important;
+    margin-top: 4px !important;
+  }
+`;
+
+
+  return (
     <>
-      <CssBaseline />
-      <Container maxWidth="md" sx={{ py: 6 }}>
-        <Paper elevation={4} sx={{ p: 5, borderRadius: 3 }}>
-          <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, fontSize: 24 }}>
-            Scale Readiness Form
-          </Typography>
+      <style>{textareaStyles}</style>
+      <div className="min-h-screen  p-4 md:p-8">
+        <div className="max-w-4xl mx-auto">
+          <Card className="shadow-lg border-0">
+            <CardHeader className=" rounded-t-lg ">
+              <CardTitle className="text-2xl font-bold">Scale Readiness Assessment</CardTitle>
+              <p className="text-black">
+                Section {currentStep + 1} of {sections.length}: {step.title}
+              </p>
+            </CardHeader>
 
-          <Divider sx={{ mb: 4 }} />
+            <CardContent className="p-6">
 
-          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-            {step.title}
-          </Typography>
+              {/* Minimal Modern Progress Bar */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-semibold text-gray-700">
+                    {step.title}
+                  </span>
+                  <span className="text-sm font-bold text-primary">
+                    {currentStep + 1}/{sections.length}
+                  </span>
+                </div>
 
-          <Form
-  schema={{
-    type: "object",
-    properties: {
-      [step.key]: schema.properties[step.key],
-    },
-  }}
-  uiSchema={{ [step.key]: uiSchema[step.key] }}
-  formData={{ [step.key]: formData[step.key] || {} }}
-  validator={validator}
-  onSubmit={(data) => {
-    console.log("Schema:", JSON.stringify(schema));
+                <div className="relative h-3 bg-gray-100 rounded-full overflow-hidden">
+                  {/* Base progress */}
+                  <div
+                    className="absolute h-full bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20 transition-all duration-500"
+                    style={{ width: '100%' }}
+                  />
 
-    if (currentStep === sections.length - 1) {
-      handleSubmit(data);
-    } else {
-      handleNext(data);
-    }
-  }}
->
-  <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
-    {currentStep > 0 && (
-      <Button variant="contained" color="secondary" onClick={handleBack}>
-        Previous
-      </Button>
-    )}
+                  {/* Active progress */}
+                  <div
+                    className="absolute h-full bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-700"
+                    style={{ width: `${progress}%` }}
+                  >
+                    {/* Glow effect */}
+                    <div className="absolute right-0 top-0 h-full w-4 blur-sm"></div>
+                  </div>
 
-    <Button variant="contained" color="primary" type="submit" sx={{ ml: "auto" }}>
-      {currentStep === sections.length - 1 ? "Submit" : "Next"}
-    </Button>
-  </Box>
-</Form>
+                  {/* Progress dots */}
+                  <div className="absolute inset-0 flex justify-between px-1">
+                    {sections.map((_, index) => (
+                      <div
+                        key={index}
+                        className={`w-4 h-4 rounded-full -mt-0.5 border-2 ${index <= currentStep
+                          ? 'bg-white border-primary shadow-md'
+                          : 'bg-gray-100 border-gray-300'
+                          }`}
+                      />
+                    ))}
+                  </div>
+                </div>
 
-</Paper>
-</Container>
-</>
-</ThemeProvider>
+                {/* Progress labels */}
+                <div className="flex justify-between mt-2 text-xs text-gray-500">
+                  <span>Start</span>
+                  <span className="font-medium">{Math.round(progress)}% Complete</span>
+                  <span>Finish</span>
+                </div>
+              </div>
 
+              <Separator className="my-6" />
+
+
+              {/* Form Section */}
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-foreground">{step.title}</h3>
+
+                <Form
+                  schema={{
+                    type: "object",
+                    properties: {
+                      [step.key]: schema.properties[step.key],
+                    },
+                  }}
+                  widgets={customWidgets}
+                  uiSchema={{
+                    [step.key]: {
+                      ...sectionUISchema[step.key],
+                      'ui:submitButtonOptions': {
+                        norender: true
+                      }
+                    }
+                  }}
+                  formData={{ [step.key]: formData[step.key] || {} }}
+                  validator={validator}
+                  onSubmit={(data) => {
+                    console.log("Schema:", JSON.stringify(schema, null, 2));
+
+                    console.log(
+                      "UI Schema:",
+                      JSON.stringify({ [step.key]: uiSchema[step.key] }, null, 2)
+                    );
+
+                    if (currentStep === sections.length - 1) {
+                      handleSubmit(data);
+                    } else {
+                      handleNext(data);
+                    }
+                  }}
+                >
+
+                  {/* Custom form controls */}
+                  <div className="flex justify-between items-center pt-6 border-t">
+                    <div>
+                      {currentStep > 0 && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={handleBack}
+                          className="gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                          Previous
+                        </Button>
+                      )}
+                    </div>
+
+                    <Button
+                      type="submit"
+                      className="gap-2 bg-primary hover:bg-primary/90"
+                    >
+                      {currentStep === sections.length - 1 ? (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          Submit Assessment
+                        </>
+                      ) : (
+                        <>
+                          Next Section
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </Form>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </>
   );
 }
+
+
+
+
+
+
+
+
+

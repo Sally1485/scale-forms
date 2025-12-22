@@ -72,8 +72,7 @@ export default function Scaleforms() {
 
           q4: {
             type: 'object',
-            title: '4. Solution Testing',
-            description: 'Your solution has been well tested with outcome analysis',
+            title: '4. Your solution has been well tested with outcome analysis',
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -887,14 +886,14 @@ export default function Scaleforms() {
 
   // Apply the UI Schema to each section
   const sectionUISchema = {
-    endurancePurpose: createQuestionUISchema('endurancePurpose', 4),
-    connectedClients: createQuestionUISchema('connectedClients', 15),
-    goodsAndServices: createQuestionUISchema('goodsAndServices', 7),
-    ecosystem: createQuestionUISchema('ecosystem', 8),
-    scaleStrategy: createQuestionUISchema('scaleStrategy', 9),
-    financial: createQuestionUISchema('financial', 15),
-    inspiredPeople: createQuestionUISchema('inspiredPeople', 15),
-    fundamentals: createQuestionUISchema('fundamentals', 3),
+    endurancePurpose: createQuestionUISchema(4),
+    connectedClients: createQuestionUISchema(15),
+    goodsAndServices: createQuestionUISchema(7),
+    ecosystem: createQuestionUISchema(8),
+    scaleStrategy: createQuestionUISchema(9),
+    financial: createQuestionUISchema(15),
+    inspiredPeople: createQuestionUISchema(15),
+    fundamentals: createQuestionUISchema(3),
   };
 
 
@@ -907,13 +906,13 @@ export default function Scaleforms() {
         <label className="text-sm font-medium text-gray-700">
           {props.label || 'Comment'}
         </label>
-        <Textarea
+        {/* <Textarea
           value={props.value || ''}
           onChange={(e) => props.onChange(e.target.value)}
           placeholder={props.placeholder || 'Enter your comments here...'}
-          className="min-h-45 resize-y h-150 "
+          className="min-h-37.5 resize-y "
 
-        />
+        /> */}
         {props.description && (
           <p className="text-sm text-gray-500 mt-1">{props.description}</p>
         )}
@@ -923,7 +922,7 @@ export default function Scaleforms() {
 
   // Custom widgets object
   const customWidgets = {
-    TextareaWidget: CustomTextareaWidget,
+    // TextareaWidget: CustomTextareaWidget,
   };
   // Handlers
   const handleNext = (data) => {
@@ -947,7 +946,7 @@ export default function Scaleforms() {
 
   const textareaStyles = `
   textarea {
-    min-height: 150px !important;
+    min-height: 100px !important;
     resize: vertical !important;
     padding: 12px !important;
     font-size: 16px !important;
@@ -1056,7 +1055,7 @@ export default function Scaleforms() {
 
                     console.log(
                       "UI Schema:",
-                      JSON.stringify({ [step.key]: uiSchema[step.key] }, null, 2)
+                      JSON.stringify({ [step.key]: sectionUISchema[step.key] }, null, 2)
                     );
 
                     if (currentStep === sections.length - 1) {

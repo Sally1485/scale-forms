@@ -63,7 +63,7 @@ export default function Scaleforms() {
           q3: {
             type: 'object',
             title:
-              '3. Your vision & mission are well-understood across the organization',
+              '3. Your vision and mission are well-understood across the organization',
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -72,8 +72,7 @@ export default function Scaleforms() {
 
           q4: {
             type: 'object',
-            title: '4. Your solution has been well tested with outcome analysis',
-            properties: {
+            title: '4. Your solution has been well tested with outcome analysis', properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
             },
@@ -128,7 +127,7 @@ export default function Scaleforms() {
 
           q5: {
             type: 'object',
-            title: '5. You have proof of current & future demand',
+            title: '5. You have proof of current and  future demand',
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -216,7 +215,7 @@ export default function Scaleforms() {
           q14: {
             type: 'object',
             title:
-              '14. You have repeatable means to engage and respond to users',
+              "14. You have repeatable means to engage and respond to users ",
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -226,7 +225,7 @@ export default function Scaleforms() {
           q15: {
             type: 'object',
             title:
-              "15. You actively respond to customers' needs",
+              "15. You actively respond to customers needs",
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -330,7 +329,7 @@ export default function Scaleforms() {
           q2: {
             type: 'object',
             title:
-              "2. You have a pro-active process in place to manager and retain partner relationships",
+              "2. You have a pro-active process in place to manage and retain partner relationships",
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -360,7 +359,7 @@ export default function Scaleforms() {
           q5: {
             type: 'object',
             title:
-              "5. You are knowledgable and have mapped the competitive landscape",
+              "5. You are knowledgeable and have mapped the competitive landscape",
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -427,7 +426,7 @@ export default function Scaleforms() {
           q3: {
             type: 'object',
             title:
-              "3. Scale unit is adaptive to adress new contexts",
+              "3. Scale unit is adaptive to address new contexts",
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -457,7 +456,7 @@ export default function Scaleforms() {
           q6: {
             type: 'object',
             title:
-              "6. You actively respond to customers' needs",
+              "6. You actively respond to customers\' needs",
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -499,7 +498,7 @@ export default function Scaleforms() {
 
       financial: {
         type: 'object',
-        title: 'Financial Sustaninability',
+        title: 'Financial Sustainability',
         properties: {
           q1: {
             type: 'object',
@@ -544,7 +543,7 @@ export default function Scaleforms() {
           q5: {
             type: 'object',
             title:
-              "5. You have strong funder relationship including proof of funders' willingness.",
+              "5. You have strong funder relationship including proof of funders\' willingness.",
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -584,7 +583,7 @@ export default function Scaleforms() {
           q9: {
             type: 'object',
             title:
-              "9. You track slaes and profitability by channel, region, segments, and products",
+              "9. You track sales and profitability by channel, region, segments, and products",
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -691,7 +690,7 @@ export default function Scaleforms() {
           q4: {
             type: 'object',
             title:
-              "4.You have a process for analyzing and assessing organizational gaps and for recruiting local and remote talente.",
+              "4.You have a process for analyzing and assessing organizational gaps and for recruiting local and remote talent.",
             properties: {
               rating: { type: 'number', title: 'Rating (0–5)' },
               comment: { type: 'string', title: 'Comment' },
@@ -846,7 +845,7 @@ export default function Scaleforms() {
           },
         }
       }
-    },
+    }
   };
 
 
@@ -973,6 +972,50 @@ export default function Scaleforms() {
                 Section {currentStep + 1} of {sections.length}: {step.title}
               </p>
             </CardHeader>
+
+             <CardContent className="pt-6">
+    <h4 className="font-semibold text-lg mb-3">
+      Assessment Instructions
+    </h4>
+
+    <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
+      <p>
+        On a scale of <strong>0 to 5</strong>, rate your venture against each
+        characteristic.
+      </p>
+
+      <ul className="list-disc pl-6 space-y-2">
+        <li>
+          <strong>5</strong> = Your venture fully behaves as the statement
+          describes.
+        </li>
+        <li>
+          <strong>0</strong> = Your venture completely fails to behave as the
+          statement describes.
+        </li>
+        <li>
+          Most scores will fall somewhere between <strong>0</strong> and
+          <strong>5</strong>.
+        </li>
+        <li>
+          Assign a score that best reflects how characteristic the statement is
+          of your venture.
+        </li>
+      </ul>
+    </div>
+  </CardContent>
+
+ <CardContent className="pt-6">
+    <h4 className="font-semibold text-lg mb-3">
+      Notes/Comments
+    </h4>
+
+    <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
+      <p>
+       Provide additional notes and comments that support your score or describe any special circumstances. Note any specific shortcomings or capability gaps.
+      </p>
+    </div>
+  </CardContent>
 
             <CardContent className="p-6">
 
@@ -1122,4 +1165,4 @@ export default function Scaleforms() {
 
 
 
-
+// {"fundamentals":{"q1":{"rating":{"ui:options":{"min":0,"max":5,"step":1}},"comment":{"ui:widget":"TextareaWidget","ui:options":{"rows":8,"classNames":"large-textarea min-h-[150px] h-[150px]"}}},"q2":{"rating":{"ui:options":{"min":0,"max":5,"step":1}},"comment":{"ui:widget":"TextareaWidget","ui:options":{"rows":8,"classNames":"large-textarea min-h-[150px] h-[150px]"}}},"q3":{"rating":{"ui:options":{"min":0,"max":5,"step":1}},"comment":{"ui:widget":"TextareaWidget","ui:options":{"rows":8,"classNames":"large-textarea min-h-[150px] h-[150px]"}}}}}

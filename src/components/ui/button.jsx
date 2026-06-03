@@ -56,3 +56,7 @@ function Button({
 }
 
 export { Button, buttonVariants }
+
+
+
+// {"fundamentals":{"q1":{"rating":{"ui:options":{"min":0,"max":5,"step":1}},"comment":{"ui:widget":"TextareaWidget","ui:options":{"rows":8,"classNames":"large-textarea min-h-[150px] h-[150px]"}}},"q2":{"rating":{"ui:options":{"min":0,"max":5,"step":1}},"comment":{"ui:widget":"TextareaWidget","ui:options":{"rows":8,"classNames":"large-textarea min-h-[150px] h-[150px]"}}},"q3":{"rating":{"ui:options":{"min":0,"max":5,"step":1}},"comment":{"ui:widget":"TextareaWidget","ui:options":{"rows":8,"classNames":"large-textarea min-h-[150px] h-[150px]"}}}}}

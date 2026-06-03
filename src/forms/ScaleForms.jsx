@@ -17,23 +17,40 @@ export default function Scaleforms() {
 
   // Steps
   const sections = [
-    { key: 'endurancePurpose' },
-    { key: 'connectedClients' },
-    { key: 'goodsAndServices' },
-    { key: 'ecosystem' },
-    { key: 'scaleStrategy' },
-    { key: 'financial' },
-    { key: 'inspiredPeople' },
-    { key: 'fundamentals' },
+   
+  { key: "endurancePurpose", title: "Endurance Purpose" },
+  { key: "connectedClients", title: "Connected Clients" },
+  { key: "goodsAndServices", title: "Innovative Goods and Services" },
+  { key: "ecosystem", title: "Synergistic Ecosystem" },
+  { key: "scaleStrategy", title: "Refined Scale Strategy" },
+  { key: "financial", title: "Financial Sustainability" },
+  { key: "inspiredPeople", title: "Inspired People" },
+  { key: "fundamentals", title: "Successful Ventures Fundamentals" },
+];
 
-  ];
 
 
   // Schema
   const schema = {
     type: 'object',
     title: 'Scale Readiness Form',
-    properties: {
+        description: ` On a scale of 0 to 5, rate your venture against each characteristic.
+
+\n\n• 5 = Your venture fully behaves as the statement describes.
+\n• 0 = Your venture completely fails to behave as the statement describes.
+\n• Most scores will fall somewhere between 0 and 5.
+\n• Assign a score that best reflects how characteristic the statement is of your venture.  \n\n\n\n\n\n\n  Notes/comments: Provide additional notes and comments that support your score or describe any special circumstances. Note any specific shortcomings or capability gaps.
+    `,
+  
+     
+properties: {
+      // notesInstructions: {
+      //   title: "Notes/Comments",
+      //   type: 'string',
+      //   description:
+      //     "Provide additional notes and comments that support your score or describe any special circumstances. Note any specific shortcomings or capability gaps.",
+      // },
+    
 
       endurancePurpose: {
         type: 'object',
@@ -851,6 +868,15 @@ export default function Scaleforms() {
 
   // UI Schema
   const uiSchema = {
+    assessmentInstructions: {
+    "ui:widget": "hidden",
+     "ui:readonly": true,
+  },
+
+  notesInstructions: {
+     "ui:readonly": true,
+    "ui:widget": "hidden"
+  },
     'ui:submitButtonOptions': {
       submitText: 'Submit',
       norender: true,
@@ -924,21 +950,45 @@ export default function Scaleforms() {
     // TextareaWidget: CustomTextareaWidget,
   };
   // Handlers
-  const handleNext = (data) => {
-    setFormData({ ...formData, [sections[currentStep].key]: data.formData });
-    setCurrentStep((prev) => Math.min(prev + 1, sections.length - 1));
-    window.scrollTo(0, 0);
-  };
+ const handleNext = (data) => {
+  const stepKey = sections[currentStep].key;
+
+  setFormData((prev) => ({
+    ...prev,
+    [stepKey]: data.formData,
+  }));
+
+  setCurrentStep((prev) => Math.min(prev + 1, sections.length - 1));
+  window.scrollTo(0, 0);
+};
 
   const handleBack = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
     window.scrollTo(0, 0);
   };
 
-  const handleSubmit = () => {
-    console.log('Final Data:', formData);
-    alert('Submitted successfully!');
+const handleSubmit = (data) => {
+  const stepKey = sections[currentStep].key;
+
+  const finalData = {
+    ...formData,
+    [stepKey]: data.formData,
   };
+
+ // Forces the entire schema to print as fully expanded text right in the stream
+console.log("Full Schema:\n", JSON.stringify(schema, null, 2));
+
+// Combines the UI schemas and forces the entire merged tree to print completely expanded
+console.log("Full UI Schema:\n", JSON.stringify({
+  ...uiSchema,
+  ...sectionUISchema,
+}, null, 2));
+
+  console.log("Final Data:", finalData);
+
+  alert("Submitted successfully!");
+};
+
 
   const step = sections[currentStep];
   const progress = ((currentStep + 1) / sections.length) * 100;
@@ -973,49 +1023,49 @@ export default function Scaleforms() {
               </p>
             </CardHeader>
 
-             <CardContent className="pt-6">
-    <h4 className="font-semibold text-lg mb-3">
-      Assessment Instructions
-    </h4>
+            <CardContent className="pt-6">
+              <h4 className="font-semibold text-lg mb-3">
+                Assessment Instructions
+              </h4>
 
-    <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
-      <p>
-        On a scale of <strong>0 to 5</strong>, rate your venture against each
-        characteristic.
-      </p>
+              <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
+                <p>
+                  On a scale of <strong>0 to 5</strong>, rate your venture against each
+                  characteristic.
+                </p>
 
-      <ul className="list-disc pl-6 space-y-2">
-        <li>
-          <strong>5</strong> = Your venture fully behaves as the statement
-          describes.
-        </li>
-        <li>
-          <strong>0</strong> = Your venture completely fails to behave as the
-          statement describes.
-        </li>
-        <li>
-          Most scores will fall somewhere between <strong>0</strong> and
-          <strong>5</strong>.
-        </li>
-        <li>
-          Assign a score that best reflects how characteristic the statement is
-          of your venture.
-        </li>
-      </ul>
-    </div>
-  </CardContent>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>
+                    <strong>5</strong> = Your venture fully behaves as the statement
+                    describes.
+                  </li>
+                  <li>
+                    <strong>0</strong> = Your venture completely fails to behave as the
+                    statement describes.
+                  </li>
+                  <li>
+                    Most scores will fall somewhere between <strong>0</strong> and
+                    <strong>5</strong>.
+                  </li>
+                  <li>
+                    Assign a score that best reflects how characteristic the statement is
+                    of your venture.
+                  </li>
+                </ul>
+              </div>
+            </CardContent>
 
- <CardContent className="pt-6">
-    <h4 className="font-semibold text-lg mb-3">
-      Notes/Comments
-    </h4>
+            <CardContent className="pt-6">
+              <h4 className="font-semibold text-lg mb-3">
+                Notes/Comments
+              </h4>
 
-    <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
-      <p>
-       Provide additional notes and comments that support your score or describe any special circumstances. Note any specific shortcomings or capability gaps.
-      </p>
-    </div>
-  </CardContent>
+              <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
+                <p>
+                  Provide additional notes and comments that support your score or describe any special circumstances. Note any specific shortcomings or capability gaps.
+                </p>
+              </div>
+            </CardContent>
 
             <CardContent className="p-6">
 
@@ -1059,6 +1109,7 @@ export default function Scaleforms() {
                     ))}
                   </div>
                 </div>
+                
 
                 {/* Progress labels */}
                 <div className="flex justify-between mt-2 text-xs text-gray-500">
@@ -1076,12 +1127,7 @@ export default function Scaleforms() {
                 <h3 className="text-xl font-semibold text-foreground">{step.title}</h3>
 
                 <Form
-                  schema={{
-                    type: "object",
-                    properties: {
-                      [step.key]: schema.properties[step.key],
-                    },
-                  }}
+                  schema={schema.properties[step.key]}
                   widgets={customWidgets}
                   uiSchema={{
                     [step.key]: {
@@ -1091,22 +1137,15 @@ export default function Scaleforms() {
                       }
                     }
                   }}
-                  formData={{ [step.key]: formData[step.key] || {} }}
+                 formData={formData[step.key] || {}}
                   validator={validator}
-                  onSubmit={(data) => {
-                    console.log("Schema:", JSON.stringify(schema, null, 2));
-
-                    console.log(
-                      "UI Schema:",
-                      JSON.stringify({ [step.key]: sectionUISchema[step.key] }, null, 2)
-                    );
-
-                    if (currentStep === sections.length - 1) {
-                      handleSubmit(data);
-                    } else {
-                      handleNext(data);
-                    }
-                  }}
+                 onSubmit={(data) => {
+  if (currentStep === sections.length - 1) {
+    handleSubmit(data);
+  } else {
+    handleNext(data);
+  }
+}}
                 >
 
                   {/* Custom form controls */}
@@ -1165,4 +1204,2385 @@ export default function Scaleforms() {
 
 
 
-// {"fundamentals":{"q1":{"rating":{"ui:options":{"min":0,"max":5,"step":1}},"comment":{"ui:widget":"TextareaWidget","ui:options":{"rows":8,"classNames":"large-textarea min-h-[150px] h-[150px]"}}},"q2":{"rating":{"ui:options":{"min":0,"max":5,"step":1}},"comment":{"ui:widget":"TextareaWidget","ui:options":{"rows":8,"classNames":"large-textarea min-h-[150px] h-[150px]"}}},"q3":{"rating":{"ui:options":{"min":0,"max":5,"step":1}},"comment":{"ui:widget":"TextareaWidget","ui:options":{"rows":8,"classNames":"large-textarea min-h-[150px] h-[150px]"}}}}}
+// {
+//   "type": "object",
+//   "title": "Scale Readiness Form",
+//   "properties": {
+//     "assessmentInstructions": {
+//       "type": "string",
+//       "title": "Assessment Instructions",
+//       "description": " On a scale of 0 to 5, rate your venture against each characteristic.\n\n\n\n• 5 = Your venture fully behaves as the statement describes.\n\n• 0 = Your venture completely fails to behave as the statement describes.\n\n• Most scores will fall somewhere between 0 and 5.\n\n• Assign a score that best reflects how characteristic the statement is of your venture.\n    "
+//     },
+//     "notesInstructions": {
+//       "title": "Notes/Comments",
+//       "type": "string",
+//       "description": "Provide additional notes and comments that support your score or describe any special circumstances. Note any specific shortcomings or capability gaps."
+//     },
+//     "endurancePurpose": {
+//       "type": "object",
+//       "title": "Endurance Purpose",
+//       "properties": {
+//         "q1": {
+//           "type": "object",
+//           "title": "1. You have clearly articulated and documented the magnitude of the BIG PROBLEM(s)",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q2": {
+//           "type": "object",
+//           "title": "2. You understand the root causes of the BIG PROBLEM your company solves",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q3": {
+//           "type": "object",
+//           "title": "3. Your vision and mission are well-understood across the organization",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q4": {
+//           "type": "object",
+//           "title": "4. Your solution has been well tested with outcome analysis",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         }
+//       }
+//     },
+//     "connectedClients": {
+//       "type": "object",
+//       "title": "Connected Clients",
+//       "properties": {
+//         "q1": {
+//           "type": "object",
+//           "title": "1. You have clearly defined primary customer segment(s)",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q2": {
+//           "type": "object",
+//           "title": "2. You know which customer segments contribute the most to profitability",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q3": {
+//           "type": "object",
+//           "title": "3. You have targeted offerings and distribution for each segment",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q4": {
+//           "type": "object",
+//           "title": "4. Your customer segments are stable or growing",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q5": {
+//           "type": "object",
+//           "title": "5. You have proof of current and  future demand",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q6": {
+//           "type": "object",
+//           "title": "6. Macro trends support your future demand evidence",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q7": {
+//           "type": "object",
+//           "title": "7. Macro factors substantiate future demand (duplicate OK)",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q8": {
+//           "type": "object",
+//           "title": "8. You understand behavioral insights about key segments",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q9": {
+//           "type": "object",
+//           "title": "9. You know what influences behavior changes in top segments",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q10": {
+//           "type": "object",
+//           "title": "10. You predict and address customer issues effectively",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q11": {
+//           "type": "object",
+//           "title": "11. You collect quantitative & qualitative customer feedback",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q12": {
+//           "type": "object",
+//           "title": "12. You inspire engagement through compelling communication",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q13": {
+//           "type": "object",
+//           "title": "13. You have strong emotional ties with customers (high retention)",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q14": {
+//           "type": "object",
+//           "title": "14. You have repeatable means to engage and respond to users ",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q15": {
+//           "type": "object",
+//           "title": "15. You actively respond to customers needs",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         }
+//       }
+//     },
+//     "goodsAndServices": {
+//       "type": "object",
+//       "title": "Innovative Goods and Services",
+//       "properties": {
+//         "q1": {
+//           "type": "object",
+//           "title": "1. You have clearly defined primary customer segment(s)",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q2": {
+//           "type": "object",
+//           "title": "2. You offer a distinctive product and solution that is hard to duplicate or substitue",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q3": {
+//           "type": "object",
+//           "title": "3. Your offering, once users engage, is sticky.  Customers find it difficult or extremely inconvenient to switch",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q4": {
+//           "type": "object",
+//           "title": "4. You occupy a distinct positioning relative to other market offerings.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q5": {
+//           "type": "object",
+//           "title": "5. Innovation is inherent in the culture of your venture.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q6": {
+//           "type": "object",
+//           "title": "6. You have a detailed multi-year new product pipeline plan",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q7": {
+//           "type": "object",
+//           "title": "7. From the users' perspective, your solution is elegant at all points of the user journey",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         }
+//       }
+//     },
+//     "ecosystem": {
+//       "type": "object",
+//       "title": "Synergistic Ecosystem",
+//       "properties": {
+//         "q1": {
+//           "type": "object",
+//           "title": "1. You have strategically engaged key partners to aid and ensure results,",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q2": {
+//           "type": "object",
+//           "title": "2. You have a pro-active process in place to manage and retain partner relationships",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q3": {
+//           "type": "object",
+//           "title": "3. You are agile and pivot-ready in response to the changing market conditions",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q4": {
+//           "type": "object",
+//           "title": "4. You collaborate with suppliers as if they are partners, sharing benefits to ensure quality.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q5": {
+//           "type": "object",
+//           "title": "5. You are knowledgeable and have mapped the competitive landscape",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q6": {
+//           "type": "object",
+//           "title": "6. You proactively act to protect your organization from the impact of competitors and challengers",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q7": {
+//           "type": "object",
+//           "title": "7. You routinely turn competition into coopetition.  .",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q8": {
+//           "type": "object",
+//           "title": "8. You study non-market conditions and articulate any warnings ",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         }
+//       }
+//     },
+//     "scaleStrategy": {
+//       "type": "object",
+//       "title": "Refined Scale Strategy",
+//       "properties": {
+//         "q1": {
+//           "type": "object",
+//           "title": "1. Scale unit is unique and delivers distinctive value",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q2": {
+//           "type": "object",
+//           "title": "2. Operations are (re)-organized for optimal scaling",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q3": {
+//           "type": "object",
+//           "title": "3. Scale unit is adaptive to address new contexts",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q4": {
+//           "type": "object",
+//           "title": "4. Conditions and prerequisites for scale are clearly articulated",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q5": {
+//           "type": "object",
+//           "title": "5. Your Scale pathway is defined and tested using external stakeholders",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q6": {
+//           "type": "object",
+//           "title": "6. You actively respond to customers' needs",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q7": {
+//           "type": "object",
+//           "title": "7. Your decision-making process is informed by reliable data",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q8": {
+//           "type": "object",
+//           "title": "8. Your team consistently accomplishes strategic objectives on time and within budget",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q9": {
+//           "type": "object",
+//           "title": "9. Your scale plan is in place, is sound, and is being followed",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         }
+//       }
+//     },
+//     "financial": {
+//       "type": "object",
+//       "title": "Financial Sustainability",
+//       "properties": {
+//         "q1": {
+//           "type": "object",
+//           "title": "1. Your scale unit model has reached break-even and financial performance is replicable",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q2": {
+//           "type": "object",
+//           "title": "2. Sources and targets for your new sales are identified and curated through a sales funnel ",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q3": {
+//           "type": "object",
+//           "title": "3. Sufficient funding lined up for operations, working capital and scale operations.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q4": {
+//           "type": "object",
+//           "title": "4. You have pursued sources of capital, and strategies are already in place to raise capital",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q5": {
+//           "type": "object",
+//           "title": "5. You have strong funder relationship including proof of funders' willingness.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q6": {
+//           "type": "object",
+//           "title": "6. You can produce at least 2 years of independently audited financial statements, analyzed for key insights",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q7": {
+//           "type": "object",
+//           "title": "7. You perform periodic budgeting and planning at different levels of the organization.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q8": {
+//           "type": "object",
+//           "title": "8. Based on analysis, you know the volume where economies of scale kick-in",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q9": {
+//           "type": "object",
+//           "title": "9. You track sales and profitability by channel, region, segments, and products",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q10": {
+//           "type": "object",
+//           "title": "10. You have varied, diversified, and predictable revenue streams",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q11": {
+//           "type": "object",
+//           "title": "11. You have power to set pricing in your industry.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q12": {
+//           "type": "object",
+//           "title": "12. You set pricing based on data collection and analysis",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q13": {
+//           "type": "object",
+//           "title": "13. You have minimal working capital tied up in inventory",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q14": {
+//           "type": "object",
+//           "title": "14. Your costs are predictable and minimized.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q15": {
+//           "type": "object",
+//           "title": "15. You have clearly laid out internal controls in place to minimize loss or seepage.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         }
+//       }
+//     },
+//     "inspiredPeople": {
+//       "type": "object",
+//       "title": "Inspired People",
+//       "properties": {
+//         "q1": {
+//           "type": "object",
+//           "title": "1. You have capable, experienced leaders who demonstrate effective leadership and functional expertise.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q2": {
+//           "type": "object",
+//           "title": "2. Your leaders set the example for effectiveness, accountability and quality of engagement..",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q3": {
+//           "type": "object",
+//           "title": "3. You distribute leadership decision-making and accountability to individuals across the organization..",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q4": {
+//           "type": "object",
+//           "title": "4.You have a process for analyzing and assessing organizational gaps and for recruiting local and remote talent.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q5": {
+//           "type": "object",
+//           "title": "5. You have a written org chart, use written job descriptions, and a consistent & documented method for sourcing, interviewing, hiring talent. ",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q6": {
+//           "type": "object",
+//           "title": "6. You have an agile process that allows your HR structure to evolve with growth.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q7": {
+//           "type": "object",
+//           "title": "7. All major roles are filled with competent professionals aligned with the organizational mission and culture",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q8": {
+//           "type": "object",
+//           "title": "8. There is a data driven performance management program in place.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q9": {
+//           "type": "object",
+//           "title": "9. Your success scorecard is balanced and considers more than just financial metrics",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q10": {
+//           "type": "object",
+//           "title": "10. We use clearly articulated, measurable objectives and targets in our performance management.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q11": {
+//           "type": "object",
+//           "title": "11. Compensation and rewards for excellent work are tied to annual employee reviews..",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q12": {
+//           "type": "object",
+//           "title": "12. Our culture is honed to drive competitive advantage, distinctiveness, agility and innovation",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q13": {
+//           "type": "object",
+//           "title": "13. Our key organizational values are explicitly shared and formally reinforced through programming.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q14": {
+//           "type": "object",
+//           "title": "14. We curate a culture of open communications where colleagues can communicate freely with and engage all other colleagues.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q15": {
+//           "type": "object",
+//           "title": "15. Learning and development are incorporated in the culture.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         }
+//       }
+//     },
+//     "fundamentals": {
+//       "type": "object",
+//       "title": " Successful Ventures Fundamentals",
+//       "properties": {
+//         "q1": {
+//           "type": "object",
+//           "title": "1. Based on data and analysis, our internal processes are efficient at creating value.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q2": {
+//           "type": "object",
+//           "title": "2. Process outputs are consistently high quality, on schedule and not impacted by material, labor or equipment shortcomings.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         },
+//         "q3": {
+//           "type": "object",
+//           "title": "3. We have smooth value chain flows, from reliable, connected , diverse sources.",
+//           "properties": {
+//             "rating": {
+//               "type": "number",
+//               "title": "Rating (0–5)"
+//             },
+//             "comment": {
+//               "type": "string",
+//               "title": "Comment"
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+
+
+
+
+
+
+
+
+// {
+//   "assessmentInstructions": {
+//     "ui:widget": "hidden",
+//     "ui:readonly": true
+//   },
+//   "notesInstructions": {
+//     "ui:readonly": true,
+//     "ui:widget": "hidden"
+//   },
+//   "ui:submitButtonOptions": {
+//     "submitText": "Submit",
+//     "norender": true
+//   },
+//   "endurancePurpose": {
+//     "q1": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q2": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q3": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q4": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     }
+//   },
+//   "connectedClients": {
+//     "q1": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q2": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q3": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q4": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q5": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q6": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q7": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q8": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q9": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q10": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q11": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q12": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q13": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q14": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q15": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     }
+//   },
+//   "goodsAndServices": {
+//     "q1": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q2": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q3": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q4": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q5": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q6": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q7": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     }
+//   },
+//   "ecosystem": {
+//     "q1": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q2": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q3": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q4": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q5": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q6": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q7": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q8": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     }
+//   },
+//   "scaleStrategy": {
+//     "q1": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q2": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q3": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q4": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q5": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q6": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q7": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q8": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q9": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     }
+//   },
+//   "financial": {
+//     "q1": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q2": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q3": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q4": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q5": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q6": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q7": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q8": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q9": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q10": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q11": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q12": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q13": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q14": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q15": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     }
+//   },
+//   "inspiredPeople": {
+//     "q1": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q2": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q3": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q4": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q5": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q6": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q7": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q8": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q9": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q10": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q11": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q12": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q13": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q14": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q15": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     }
+//   },
+//   "fundamentals": {
+//     "q1": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q2": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     },
+//     "q3": {
+//       "rating": {
+//         "ui:options": {
+//           "min": 0,
+//           "max": 5,
+//           "step": 1
+//         }
+//       },
+//       "comment": {
+//         "ui:widget": "TextareaWidget",
+//         "ui:options": {
+//           "rows": 8,
+//           "classNames": "large-textarea min-h-[150px] h-[150px]"
+//         }
+//       }
+//     }
+//   }
+// }
